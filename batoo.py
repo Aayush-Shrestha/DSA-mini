@@ -7,8 +7,8 @@ window_height = 700
 
 window = pygame.display.set_mode((window_width, window_height))
 
-columns = 50
-rows =  50
+columns = 20
+rows =  20
 
 box_width = window_width//columns
 box_height= window_height//rows
@@ -41,7 +41,7 @@ start_box.start = True
 def main():
     begin_algo = False #start algorithm
     target_box_set= False
-
+    node_box_set=False
 
     while True:
         for event in pygame.event.get():
@@ -65,6 +65,12 @@ def main():
                     target_box=grid[i][j]
                     target_box.target = True
                     target_box_set=True
+                if  event.buttons[1] and event.buttons[0]:
+                    i = x// box_width
+                    j =  y// box_height
+                    node_box=grid[i][j]
+                    node_box.node = True
+                    node_box_set=True
             #start algorithm
             if event.type == pygame.KEYDOWN and target_box_set:
                 begin_search = True
@@ -83,6 +89,8 @@ def main():
                     box.draw(window,(150,150,150))
                 if box.target:
                     box.draw(window,(200,200,0))
+                if box.node:
+                    box.draw(window,(0,0,200))
         pygame.display.flip()
 
 
