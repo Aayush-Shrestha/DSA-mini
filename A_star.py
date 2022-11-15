@@ -1,15 +1,15 @@
 import pygame
 import math
 from queue import PriorityQueue
+import os
 
 def alg():
-	WIDTH = 600
+	WIDTH = 700
 	WIN = pygame.display.set_mode((WIDTH, WIDTH))
 	pygame.display.set_caption("A* Path Finding Algorithm")
 
 	RED = (255, 0, 0)
 	GREEN = (0, 255, 0)
-	BLUE = (0, 255, 0)
 	YELLOW = (255, 255, 0)
 	WHITE = (200, 200, 200)
 	BLACK = (0, 0, 0)
@@ -17,6 +17,7 @@ def alg():
 	ORANGE = (255, 165 ,0)
 	GREY = (128, 128, 128)
 	TURQUOISE = (64, 224, 208)
+	BLUE = (0,0,255)
 
 	class Spot:
 		def __init__(self, row, col, width, total_rows):
@@ -42,16 +43,16 @@ def alg():
 			return self.color == BLACK
 
 		def is_start(self):
-			return self.color == ORANGE
+			return self.color == BLUE
 
 		def is_end(self):
-			return self.color == TURQUOISE
+			return self.color == YELLOW
 
 		def reset(self):
 			self.color = WHITE
 
 		def make_start(self):
-			self.color = ORANGE
+			self.color = BLUE
 
 		def make_closed(self):
 			self.color = RED
@@ -63,7 +64,7 @@ def alg():
 			self.color = BLACK
 
 		def make_end(self):
-			self.color = TURQUOISE
+			self.color = YELLOW
 
 		def make_path(self):
 			self.color = PURPLE
@@ -144,6 +145,7 @@ def alg():
 
 			if current != start:
 				current.make_closed()
+				
 
 		return False
 
@@ -218,7 +220,7 @@ def alg():
 					elif spot != end and spot != start:
 						spot.make_barrier()
 
-				elif pygame.mouse.get_pressed()[2]: # RIGHT
+				elif pygame.mouse.get_pressed()[1]: # RIGHT
 					pos = pygame.mouse.get_pos()
 					row, col = get_clicked_pos(pos, ROWS, width)
 					spot = grid[row][col]
@@ -235,11 +237,14 @@ def alg():
 								spot.update_neighbors(grid)
 
 						algorithm(lambda: draw(win, grid, ROWS, width), grid, start, end)
+					
 
-					if event.key == pygame.K_c:
-						start = None
-						end = None
-						grid = make_grid(ROWS, width)
+					elif event.key == pygame.K_c:
+						alg()
+					
+					elif event.key == pygame.K_BACKSPACE:
+						pygame.quit()
+						os.system('python all.py')
 
 		pygame.quit()
 	main(WIN,WIDTH)
