@@ -2,6 +2,7 @@ import pygame
 import sys
 import numpy as np
 import os
+import random
 
 def main():
     window_width = 700
@@ -12,9 +13,9 @@ def main():
     columns = 50
     rows =  50
 
-    point = 7
-    ant = 6
-    gener = 6
+    point = 8
+    ant = 8
+    gener = 9
 
     dist = np.zeros((point,point))
     pref = np.zeros((point,point))
@@ -51,38 +52,40 @@ def main():
             x= int(parr[i-1,ant])
             y= int(parr[i,ant])
             z=pref[x][y]
-            z=z*8
+            z=z*9
             z=z//10
             pref[x][y]=z
             pref[y][x]=z
 
 
     def Astart(gen):
-        i=0
-        j=0
-        n=0
+        i,j,n,n1,x=0,0,0,0,0
+        a= list(range(1,point))
         global parr
         parr = np.zeros((point+2,ant+1))
         for v in range(0,ant):
             p_temp=pref.copy()
             n=0
-            while n!=point:
-                l=1
-                if n==point-1:
-                    l=0
-                for j in range(l,point):
-                    rand =  np.random.randint(low=1, high= 40)
+            while n!=point-1:
+                random.shuffle(a)
+                if n1==n and x<100:
+                    x=x+10
+                n1=n
+                for j in a:
+                    rand =  np.random.randint(low=5, high= x)
                     if p_temp[i][j]<=rand and  p_temp[i][j] !=0:
                         parr[n+1][v]=j
                         if n!=0:
-                            p_temp[i,:]=0
-                            p_temp[:,i]=0
+                            p_temp[:,i]=p_temp[i,:]=0
                         n=n+1
                         w=dist[i][j]
                         parr[point+1][v] +=w
                         i=j
                         break
-                    
+            parr[n+1][v]=0
+            p_temp[i,:]=0
+            p_temp[:,i]=0
+            parr[point+1][v] +=dist[i][j]
         l= parr[point+1][0]    
         m=0    
         for k in range(1,ant):
@@ -117,12 +120,15 @@ def main():
                 #start algorithm
                 if event.type == pygame.KEYDOWN :
                     if event.key == pygame.K_SPACE and len(NOD)>=point:
+                        random.shuffle(NOD)
                         for i in range(0,point-1):
                             for j in range(i+1,point):
                                 dist[i][j] = dist[j][i]=(((NOD[i].x-NOD[j].x)**2) +  (NOD[i].y-NOD[j].y)**2)**.5 
-                                pref[i][j] = pref[j][i] = dist[i][j] //1     
+                                pref[i][j] = pref[j][i] = dist[i][j] //1    
+                       # print(pref) 
                         for gen in range(0, gener ):
                             Astart(gen)
+                            print(parr[:,ant])
                         begin_search=True
                     elif event.key == pygame.K_c:
                         main()
@@ -131,26 +137,26 @@ def main():
                         os.system('python all.py')
                     
                     
-    #fill window with black color
-            window.fill((0, 0, 0))
+    #fill window with grey color
+            window.fill((120, 120, 120))
 
             for i in range(columns):
                 for j  in range(rows):
                     box=grid[i][j]
-                    box.draw(window,(60,80,100))#grey blue bg
+                    box.draw(window,(200,200,200)) # box color
                     if box.node:
-                        box.draw(window,(150,000,150))#node color
+                        box.draw(window,(250,0,0)) # node color
             if begin_search==True:
                 #display path
                 for i in range(1,point+1):
                     a = int(parr[i-1,ant])
                     b = int(parr[i,ant])
-                    x1 = ratio*NOD[a].x + 1
-                    y1 = ratio*NOD[a].y + 1
-                    x2 = ratio*NOD[b].x + 1
-                    y2 = ratio*NOD[b].y + 1
+                    x1 = ratio*NOD[a].x + 5
+                    y1 = ratio*NOD[a].y + 5
+                    x2 = ratio*NOD[b].x + 5
+                    y2 = ratio*NOD[b].y + 5
                     
-                    pygame.draw.line(window,(200,200,200), (x1, y1), (x2, y2),4)
+                    pygame.draw.line(window,(20,20,20), (x1, y1), (x2, y2),4)
             pygame.display.flip()
 
     alg()
