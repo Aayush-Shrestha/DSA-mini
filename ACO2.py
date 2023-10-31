@@ -14,7 +14,7 @@ def main():
     rows =  50
 
     point = 8
-    ant = 8
+    ant = 12
     gener = 9
 
     dist = np.zeros((point,point))
