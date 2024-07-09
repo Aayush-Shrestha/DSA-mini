@@ -6,11 +6,11 @@ from pygame_widgets.button import Button
 def now(x):
     pygame.quit()
     if x == 1 :
-        os.system('python ACO2.py')
+        os.system('python3 ACO4.py')
     elif x == 2 :
-        os.system('python A_star.py')
+        os.system('python3 A_star.py')
     elif x == 3 :
-        os.system('python Dijkstra.py')
+        os.system('python3 Dijkstra.py')
 # Set up Pygame
 pygame.init()
 win = pygame.display.set_mode((700, 700))
@@ -34,6 +34,7 @@ button1 = Button(
     radius=20,  # Radius of border corners (leave empty for not curved)
     onClick=lambda: now(1)  # Function to call when clicked on
 )
+
 button2 = Button(
 
     win,  # Surface to place button on
@@ -51,6 +52,7 @@ button2 = Button(
     radius=20,  # Radius of border corners (leave empty for not curved)
     onClick=lambda: now(2)  # Function to call when clicked on
 )
+
 button3 = Button(
 
     win,  # Surface to place button on
@@ -82,5 +84,4 @@ while run:
 
     pygame_widgets.update(events)  # Call once every loop to allow widgets to render and listen
     pygame.display.update()
-
 
