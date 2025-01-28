@@ -76,11 +76,11 @@ def main():
                     if p_temp[i][j]<=rand and  p_temp[i][j] !=0:
                         parr[n+1][v]=j
                         if n!=0:
-                            p_temp[:,i]=p_temp[i,:]=0
+                            p_temp[:,i] = p_temp[i,:] = 0
                         n=n+1
                         w=dist[i][j]
                         parr[point+1][v] +=w
-                        i=j
+                        i = j
                         break
             parr[n+1][v]=0
             p_temp[i,:]=0
